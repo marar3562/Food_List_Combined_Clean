@@ -9,6 +9,6 @@ Currently we archive separate years of Fair Shares data into separate Google She
 5. Add in additonal cleansed columns (where applicable)
 6. Creat a single source of truth that updates so future projects do not have to find multiple seasonal files and contain extra work to clean data
 
-[Clean Combined Google Sheet]()
-[Season 14 Google Sheet](https://docs.google.com/spreadsheets/d/1m45w0hQOkvUFvNpc5MwQcN4snGs0Lkrb6kJfOUJf6tw/edit#gid=608620234)
-[Season 15 Google Sheet]()
+* [Clean Combined Google Sheet]()
+* [Season 14 Google Sheet](https://docs.google.com/spreadsheets/d/1m45w0hQOkvUFvNpc5MwQcN4snGs0Lkrb6kJfOUJf6tw/edit#gid=608620234)
+* [Season 15 Google Sheet]()
