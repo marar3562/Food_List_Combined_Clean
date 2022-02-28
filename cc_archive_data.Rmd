@@ -1,0 +1,270 @@
+---
+title: "Clean and Combine Archive Data"
+output: html_notebook
+---
+
+## Libraries
+
+```{r}
+library(googlesheets4)
+library(tidyverse)
+```
+
+## Sheets Connection
+
+```{r}
+gs4_auth(email = "")
+```
+
+
+## Season 14
+
+```{r}
+sheet_id_14 = "1m45w0hQOkvUFvNpc5MwQcN4snGs0Lkrb6kJfOUJf6tw"
+
+#Share Numbers tab
+sn = range_read(sheet_id_14
+                ,sheet = 'share_numbers'
+                ,col_types = 'icccicD-'
+)
+
+#Farmer Produce tab
+fp = range_read(sheet_id_14
+                ,sheet = 'farm_produce'
+                ,skip = 1
+                ,col_types = 'icccnnnnncD'
+)
+
+#Weekly Share Lists tab
+wsl = range_read(sheet_id_14
+                 ,sheet = 'weekly_share_lists'
+                 ,col_types = 'iccicin--D'
+)
+
+#Weekly Par tab
+################
+
+#Inventory Sales tab
+is = range_read(sheet_id_14
+                ,sheet = 'inv_sales'
+                ,col_types = 'iccnnccD--'
+)
+
+#Master Item List tab
+mil = range_read(sheet_id_14
+                 ,sheet = 'master_item_list'
+                 ,col_types = 'cccccccnccD'
+)
+
+#Share List tab
+################
+
+#Default Par tab
+################
+
+#Share Rotation tab
+sr = range_read(sheet_id_14
+                ,sheet = 'share_rotation'
+                ,col_types = '----Dicic----------'
+)
+
+#Farmer List tab
+################
+
+#Produce Per List tab
+################
+
+rm(sheet_id_14)
+
+```
+
+## Season 15
+
+```{r}
+sheet_id_15 = ""
+
+rm(sheet_id_15)
+```
+
+## Combine Data
+
+```{r}
+#Share Numbers tab
+c_sn = sn
+
+#Farmer Produce tab
+c_fp = fp
+
+#Weekly Share Lists tab
+c_wsl = wsl
+
+#Weekly Par tab
+################
+
+#Inventory Sales tab
+c_is = is
+
+#Master Item List tab
+c_mil = mil
+
+#Share List tab
+################
+
+#Default Par tab
+################
+
+#Share Rotation tab
+c_sr = sr
+
+#Farmer List tab
+################
+
+#Produce Per List tab
+################
+```
+
+## Clean Data
+
+```{r}
+#Share Numbers tab
+cc_sn = c_sn %>% 
+  rename_all(tolower) %>% 
+  select_all(funs(gsub(" ", "_", .)))
+
+#Farmer Produce tab
+cc_fp_v1 = c_fp %>% 
+  rename_all(tolower) %>% 
+  select_all(funs(gsub(" ", "_", .))) %>% 
+  mutate(av_min = ifelse(is.na(av_min), 0, av_min)
+         ,av_max = ifelse(is.na(av_max), 0, av_min)
+         ,order = ifelse(is.na(order), 0, order)
+         ,store = ifelse(is.na(store), 0, store)
+         ,store_note = ifelse(is.na(store_note), '', store_note)) %>% 
+  mutate(clean = ifelse(av_min > 0 | av_max > 0 | order > 0 | store > 0 | store_note != '', 1, 0)) 
+
+stopifnot(cc_fp_v1 %>% filter(is.na(clean)) %>% summarise(n = n()) %>% pull == 0)
+
+cc_fp = cc_fp_v1 %>% 
+  filter(!is.na(item)) %>% 
+  filter(clean == 1) %>% 
+  select(-clean) %>% 
+  mutate(store_note = ifelse(store_note == '', NA, store_note))
+
+#Weekly Share Lists tab
+cc_wsl = c_wsl %>% 
+  rename_all(tolower) %>% 
+  select_all(funs(gsub(" ", "_", .)))
+
+#Weekly Par tab
+################
+
+#Inventory Sales tab
+cc_is = c_is %>% 
+  rename_all(tolower) %>% 
+  select_all(funs(gsub(" ", "_", .)))
+
+#Master Item List tab
+cc_mil = c_mil %>% 
+  rename_all(tolower) %>% 
+  select_all(funs(gsub(" ", "_", .)))
+
+#Share List tab
+################
+
+#Default Par tab
+################
+
+#Share Rotation tab
+cc_sr = c_sr %>% 
+  rename_all(tolower) %>% 
+  select_all(funs(gsub(" ", "_", .)))
+
+#Farmer List tab
+################
+
+#Produce Per List tab
+################
+```
+
+## Add New Columns
+
+```{r}
+#Share Numbers tab
+ccc_sn = cc_sn
+
+#Farmer Produce tab
+ccc_fp = cc_fp
+
+#Weekly Share Lists tab
+ccc_wsl = cc_wsl
+
+#Weekly Par tab
+################
+
+#Inventory Sales tab
+ccc_is = cc_is
+
+#Master Item List tab
+ccc_mil = cc_mil
+
+#Share List tab
+################
+
+#Default Par tab
+################
+
+#Share Rotation tab
+ccc_sr = cc_sr
+
+#Farmer List tab
+################
+
+#Produce Per List tab
+################
+```
+
+## Upload Data to Google Sheets
+
+```{r}
+sheet_id_ccc = "1xs8TAMrSsJuL_gou4y0DBH3IkaTH0eBn_pdboCGWFTI"
+
+#Share Numbers tab
+sheet_write(ccc_sn, sheet_id_ccc, sheet = "share_numbers")
+
+#Farmer Produce tab
+sheet_write(ccc_fp, sheet_id_ccc, sheet = "farm_produce")
+
+#Weekly Share Lists tab
+sheet_write(ccc_wsl, sheet_id_ccc, sheet = "weekly_share_lists")
+
+#Weekly Par tab
+################
+
+#Inventory Sales tab
+sheet_write(ccc_is, sheet_id_ccc, sheet = "inv_sales")
+
+#Master Item List tab
+sheet_write(ccc_mil, sheet_id_ccc, sheet = "master_item_list")
+
+#Share List tab
+################
+
+#Default Par tab
+################
+
+#Share Rotation tab
+sheet_write(ccc_sr, sheet_id_ccc, sheet = "share_rotation")
+
+#Farmer List tab
+################
+
+#Produce Per List tab
+################
+```
+
+## Data Checks
+
+```{r}
+
+```
+
