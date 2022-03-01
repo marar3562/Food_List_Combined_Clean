@@ -19,7 +19,7 @@ gs4_auth(email = "")
 
 ## Season 14
 
-```{r}
+```{r warning=FALSE}
 sheet_id_14 = "1m45w0hQOkvUFvNpc5MwQcN4snGs0Lkrb6kJfOUJf6tw"
 
 #Share Numbers tab
@@ -90,22 +90,27 @@ rm(sheet_id_15)
 
 ```{r}
 #Share Numbers tab
-c_sn = sn
+c_sn = sn %>% 
+  mutate(season = 's14')
 
 #Farmer Produce tab
-c_fp = fp
+c_fp = fp %>% 
+  mutate(season = 's14')
 
 #Weekly Share Lists tab
-c_wsl = wsl
+c_wsl = wsl %>% 
+  mutate(season = 's14')
 
 #Weekly Par tab
 ################
 
 #Inventory Sales tab
-c_is = is
+c_is = is %>% 
+  mutate(season = 's14')
 
 #Master Item List tab
-c_mil = mil
+c_mil = mil %>% 
+  mutate(season = 's14')
 
 #Share List tab
 ################
@@ -114,7 +119,8 @@ c_mil = mil
 ################
 
 #Share Rotation tab
-c_sr = sr
+c_sr = sr %>% 
+  mutate(season = 's14')
 
 #Farmer List tab
 ################
@@ -136,7 +142,7 @@ cc_fp_v1 = c_fp %>%
   rename_all(tolower) %>% 
   select_all(funs(gsub(" ", "_", .))) %>% 
   mutate(av_min = ifelse(is.na(av_min), 0, av_min)
-         ,av_max = ifelse(is.na(av_max), 0, av_min)
+         ,av_max = ifelse(is.na(av_max), 0, av_max)
          ,order = ifelse(is.na(order), 0, order)
          ,store = ifelse(is.na(store), 0, store)
          ,store_note = ifelse(is.na(store_note), '', store_note)) %>% 
@@ -153,20 +159,33 @@ cc_fp = cc_fp_v1 %>%
 #Weekly Share Lists tab
 cc_wsl = c_wsl %>% 
   rename_all(tolower) %>% 
-  select_all(funs(gsub(" ", "_", .)))
+  select_all(funs(gsub(" ", "_", .))) %>% 
+  filter(!is.na(item) & !is.na(week) & !is.na(item_nu))
 
 #Weekly Par tab
 ################
 
 #Inventory Sales tab
-cc_is = c_is %>% 
+cc_is_v1 = c_is %>% 
   rename_all(tolower) %>% 
-  select_all(funs(gsub(" ", "_", .)))
+  select_all(funs(gsub(" ", "_", .))) %>% 
+  rename(invent_manual = invent._manual) %>% 
+  mutate(invent_from_farmigo = ifelse(is.na(invent_from_farmigo), 0, invent_from_farmigo)
+         ,invent_manual = ifelse(is.na(invent_manual), 0, invent_manual)
+         ,clean = ifelse(invent_from_farmigo > 0 | invent_manual > 0 | !is.na(inventory_note) | !is.na(sold), 1, 0) 
+         )
+
+stopifnot(cc_is_v1 %>% filter(is.na(clean)) %>% summarise(n = n()) %>% pull == 0)
+
+cc_is = cc_is_v1 %>% 
+  filter(clean == 1) %>% 
+  select(-clean)
 
 #Master Item List tab
 cc_mil = c_mil %>% 
   rename_all(tolower) %>% 
-  select_all(funs(gsub(" ", "_", .)))
+  select_all(funs(gsub(" ", "_", .))) %>% 
+  filter(!is.na(category) | !is.na(type) | !is.na(preferred_per_value))
 
 #Share List tab
 ################
@@ -177,7 +196,8 @@ cc_mil = c_mil %>%
 #Share Rotation tab
 cc_sr = c_sr %>% 
   rename_all(tolower) %>% 
-  select_all(funs(gsub(" ", "_", .)))
+  select_all(funs(gsub(" ", "_", .))) %>% 
+  rename(week = 'week_#') 
 
 #Farmer List tab
 ################
@@ -190,19 +210,35 @@ cc_sr = c_sr %>%
 
 ```{r}
 #Share Numbers tab
-ccc_sn = cc_sn
+ccc_sn = cc_sn %>% 
+  left_join(cc_sr %>% 
+              select(season, week, date) %>% 
+              distinct()
+            , by = c('season','week'))
 
 #Farmer Produce tab
-ccc_fp = cc_fp
+ccc_fp = cc_fp %>% 
+  left_join(cc_sr %>% 
+              select(season, week, date) %>% 
+              distinct()
+            , by = c('season','week'))
 
 #Weekly Share Lists tab
-ccc_wsl = cc_wsl
+ccc_wsl = cc_wsl %>% 
+  left_join(cc_sr %>% 
+              select(season, week, date) %>% 
+              distinct()
+            , by = c('season','week'))
 
 #Weekly Par tab
 ################
 
 #Inventory Sales tab
-ccc_is = cc_is
+ccc_is = cc_is  %>% 
+  left_join(cc_sr %>% 
+              select(season, week, date) %>% 
+              distinct()
+            , by = c('season','week'))
 
 #Master Item List tab
 ccc_mil = cc_mil
