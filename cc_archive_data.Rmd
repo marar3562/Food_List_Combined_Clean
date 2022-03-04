@@ -23,20 +23,20 @@ gs4_auth(email = "")
 sheet_id_14 = "1m45w0hQOkvUFvNpc5MwQcN4snGs0Lkrb6kJfOUJf6tw"
 
 #Share Numbers tab
-sn = range_read(sheet_id_14
+sn_14 = range_read(sheet_id_14
                 ,sheet = 'share_numbers'
                 ,col_types = 'icccicD-'
 )
 
 #Farmer Produce tab
-fp = range_read(sheet_id_14
+fp_14 = range_read(sheet_id_14
                 ,sheet = 'farm_produce'
                 ,skip = 1
                 ,col_types = 'icccnnnnncD'
 )
 
 #Weekly Share Lists tab
-wsl = range_read(sheet_id_14
+wsl_14 = range_read(sheet_id_14
                  ,sheet = 'weekly_share_lists'
                  ,col_types = 'iccicin--D'
 )
@@ -45,13 +45,13 @@ wsl = range_read(sheet_id_14
 ################
 
 #Inventory Sales tab
-is = range_read(sheet_id_14
+is_14 = range_read(sheet_id_14
                 ,sheet = 'inv_sales'
                 ,col_types = 'iccnnccD--'
 )
 
 #Master Item List tab
-mil = range_read(sheet_id_14
+mil_14 = range_read(sheet_id_14
                  ,sheet = 'master_item_list'
                  ,col_types = 'cccccccnccD'
 )
@@ -63,7 +63,7 @@ mil = range_read(sheet_id_14
 ################
 
 #Share Rotation tab
-sr = range_read(sheet_id_14
+sr_14 = range_read(sheet_id_14
                 ,sheet = 'share_rotation'
                 ,col_types = '----Dicic----------'
 )
@@ -81,36 +81,41 @@ rm(sheet_id_14)
 ## Season 15
 
 ```{r}
-sheet_id_15 = ""
+sheet_id_15 = "125T2Gz-LJ9hyVivRasRD-Uzm-avJIbJfKN2ACqNrHM0"
 
-rm(sheet_id_15)
-```
-
-## Combine Data
-
-```{r}
 #Share Numbers tab
-c_sn = sn %>% 
-  mutate(season = 's14')
+sn_15 = range_read(sheet_id_15
+                ,sheet = 'share_numbers'
+                ,col_types = 'icccicD-'
+)
 
 #Farmer Produce tab
-c_fp = fp %>% 
-  mutate(season = 's14')
+fp_15 = range_read(sheet_id_15
+                ,sheet = 'farm_produce'
+                ,skip = 1
+                ,col_types = 'icccnnnnncD'
+)
 
 #Weekly Share Lists tab
-c_wsl = wsl %>% 
-  mutate(season = 's14')
+wsl_15 = range_read(sheet_id_15
+                 ,sheet = 'weekly_share_lists'
+                 ,col_types = 'iccicin--D'
+)
 
 #Weekly Par tab
 ################
 
 #Inventory Sales tab
-c_is = is %>% 
-  mutate(season = 's14')
+is_15 = range_read(sheet_id_15
+                ,sheet = 'inv_sales'
+                ,col_types = 'iccnnccD--'
+)
 
 #Master Item List tab
-c_mil = mil %>% 
-  mutate(season = 's14')
+mil_15 = range_read(sheet_id_15
+                 ,sheet = 'master_item_list'
+                 ,col_types = 'cccccccnccD'
+)
 
 #Share List tab
 ################
@@ -119,8 +124,73 @@ c_mil = mil %>%
 ################
 
 #Share Rotation tab
-c_sr = sr %>% 
-  mutate(season = 's14')
+sr_15 = range_read(sheet_id_15
+                ,sheet = 'share_rotation'
+                ,col_types = '----Dicic----------'
+)
+
+#Farmer List tab
+################
+
+#Produce Per List tab
+################
+
+rm(sheet_id_15)
+```
+
+## Combine Data
+
+```{r}
+#Share Numbers tab
+c_sn = sn_14 %>% 
+  mutate(season = 's14') %>% 
+  bind_rows(sn_15 %>% 
+              mutate(season = 's15')
+            )
+
+#Farmer Produce tab
+c_fp = fp_14 %>% 
+  mutate(season = 's14') %>% 
+  bind_rows(fp_15 %>% 
+              mutate(season = 's15')
+            )
+
+#Weekly Share Lists tab
+c_wsl = wsl_14 %>% 
+  mutate(season = 's14') %>% 
+  bind_rows(wsl_15 %>% 
+              mutate(season = 's15')
+            )
+
+#Weekly Par tab
+################
+
+#Inventory Sales tab
+c_is = is_14 %>% 
+  mutate(season = 's14') %>% 
+  bind_rows(is_15 %>% 
+              mutate(season = 's15')
+            )
+
+#Master Item List tab
+c_mil = mil_14 %>% 
+  mutate(season = 's14') %>% 
+  bind_rows(mil_15 %>% 
+              mutate(season = 's15')
+            )
+
+#Share List tab
+################
+
+#Default Par tab
+################
+
+#Share Rotation tab
+c_sr = sr_14 %>% 
+  mutate(season = 's14') %>% 
+  bind_rows(sr_15 %>% 
+              mutate(season = 's15')
+            )
 
 #Farmer List tab
 ################
@@ -135,7 +205,8 @@ c_sr = sr %>%
 #Share Numbers tab
 cc_sn = c_sn %>% 
   rename_all(tolower) %>% 
-  select_all(funs(gsub(" ", "_", .)))
+  select_all(funs(gsub(" ", "_", .))) %>% 
+  filter(!is.na(week))
 
 #Farmer Produce tab
 cc_fp_v1 = c_fp %>% 
