@@ -13,7 +13,7 @@ library(tidyverse)
 ## Sheets Connection
 
 ```{r}
-gs4_auth(email = "")
+gs4_auth(email = "") 
 ```
 
 
