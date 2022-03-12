@@ -330,6 +330,16 @@ ccc_sr = cc_sr
 ################
 ```
 
+## Create new data sets
+
+```{r}
+#Sales Only
+ccc_so = ccc_is %>% 
+  filter(!is.na(sold)) %>% 
+  select(week, producer, item, sold, archive_date, season, date)
+
+```
+
 ## Upload Data to Google Sheets
 
 ```{r}
@@ -367,6 +377,9 @@ sheet_write(ccc_sr, sheet_id_ccc, sheet = "share_rotation")
 
 #Produce Per List tab
 ################
+
+############# New Tables ############# 
+sheet_write(ccc_so, sheet_id_ccc, sheet = "sales_only")
 ```
 
 ## Data Checks
