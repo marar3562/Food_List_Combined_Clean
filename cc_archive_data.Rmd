@@ -58,6 +58,10 @@ mil_14 = range_read(sheet_id_14
 
 #Share List tab
 ################
+sl_14 = range_read(sheet_id_14
+                ,sheet = 'share_list'
+                ,col_types = 'ccnD'
+)
 
 #Default Par tab
 ################
@@ -70,6 +74,10 @@ sr_14 = range_read(sheet_id_14
 
 #Farmer List tab
 ################
+fl_14 = range_read(sheet_id_14
+                ,sheet = 'farmer_list'
+                ,col_types = 'ccccccD'
+)
 
 #Produce Per List tab
 ################
@@ -119,6 +127,10 @@ mil_15 = range_read(sheet_id_15
 
 #Share List tab
 ################
+sl_15 = range_read(sheet_id_15
+                ,sheet = 'share_list'
+                ,col_types = 'ccnD'
+)
 
 #Default Par tab
 ################
@@ -131,6 +143,10 @@ sr_15 = range_read(sheet_id_15
 
 #Farmer List tab
 ################
+fl_15 = range_read(sheet_id_15
+                ,sheet = 'farmer_list'
+                ,col_types = 'ccccccD'
+)
 
 #Produce Per List tab
 ################
@@ -181,6 +197,11 @@ c_mil = mil_14 %>%
 
 #Share List tab
 ################
+c_sl = sl_14 %>% 
+  mutate(season = 's14') %>% 
+  bind_rows(sl_15 %>% 
+              mutate(season = 's15')
+            )
 
 #Default Par tab
 ################
@@ -194,6 +215,11 @@ c_sr = sr_14 %>%
 
 #Farmer List tab
 ################
+c_fl = fl_14 %>% 
+  mutate(season = 's14') %>% 
+  bind_rows(fl_15 %>% 
+              mutate(season = 's15')
+            )
 
 #Produce Per List tab
 ################
@@ -260,6 +286,9 @@ cc_mil = c_mil %>%
 
 #Share List tab
 ################
+cc_sl = c_sl %>% 
+  rename_all(tolower) %>% 
+  select_all(funs(gsub(" ", "_", .))) 
 
 #Default Par tab
 ################
@@ -272,6 +301,9 @@ cc_sr = c_sr %>%
 
 #Farmer List tab
 ################
+cc_fl = c_fl %>% 
+  rename_all(tolower) %>% 
+  select_all(funs(gsub(" ", "_", .))) 
 
 #Produce Per List tab
 ################
@@ -316,6 +348,7 @@ ccc_mil = cc_mil
 
 #Share List tab
 ################
+ccc_sl = cc_sl
 
 #Default Par tab
 ################
@@ -325,6 +358,7 @@ ccc_sr = cc_sr
 
 #Farmer List tab
 ################
+ccc_fl = cc_fl
 
 #Produce Per List tab
 ################
@@ -365,6 +399,7 @@ sheet_write(ccc_mil, sheet_id_ccc, sheet = "master_item_list")
 
 #Share List tab
 ################
+sheet_write(ccc_sl, sheet_id_ccc, sheet = "share_list")
 
 #Default Par tab
 ################
@@ -374,6 +409,7 @@ sheet_write(ccc_sr, sheet_id_ccc, sheet = "share_rotation")
 
 #Farmer List tab
 ################
+sheet_write(ccc_fl, sheet_id_ccc, sheet = "farmer_list")
 
 #Produce Per List tab
 ################
