@@ -317,21 +317,36 @@ ccc_sn = cc_sn %>%
   left_join(cc_sr %>% 
               select(season, week, date) %>% 
               distinct()
-            , by = c('season','week'))
+            , by = c('season','week')) %>% 
+  mutate(season_week = paste0(str_replace(season,'s',''),'.',
+                              ifelse(week < 0, '-01',
+                                     ifelse(str_length(week)==1,paste0('0',week),week))
+                              )
+         )
 
 #Farmer Produce tab
 ccc_fp = cc_fp %>% 
   left_join(cc_sr %>% 
               select(season, week, date) %>% 
               distinct()
-            , by = c('season','week'))
+            , by = c('season','week')) %>% 
+  mutate(season_week = paste0(str_replace(season,'s',''),'.',
+                              ifelse(week < 0, '-01',
+                                     ifelse(str_length(week)==1,paste0('0',week),week))
+                              )
+         )
 
 #Weekly Share Lists tab
 ccc_wsl = cc_wsl %>% 
   left_join(cc_sr %>% 
               select(season, week, date) %>% 
               distinct()
-            , by = c('season','week'))
+            , by = c('season','week')) %>% 
+  mutate(season_week = paste0(str_replace(season,'s',''),'.',
+                              ifelse(week < 0, '-01',
+                                     ifelse(str_length(week)==1,paste0('0',week),week))
+                              )
+         )
 
 #Weekly Par tab
 ################
@@ -341,7 +356,12 @@ ccc_is = cc_is  %>%
   left_join(cc_sr %>% 
               select(season, week, date) %>% 
               distinct()
-            , by = c('season','week'))
+            , by = c('season','week')) %>% 
+  mutate(season_week = paste0(str_replace(season,'s',''),'.',
+                              ifelse(week < 0, '-01',
+                                     ifelse(str_length(week)==1,paste0('0',week),week))
+                              )
+         )
 
 #Master Item List tab
 ccc_mil = cc_mil
@@ -354,7 +374,12 @@ ccc_sl = cc_sl
 ################
 
 #Share Rotation tab
-ccc_sr = cc_sr
+ccc_sr = cc_sr %>% 
+  mutate(season_week = paste0(str_replace(season,'s',''),'.',
+                              ifelse(week < 0, '-01',
+                                     ifelse(str_length(week)==1,paste0('0',week),week))
+                              )
+         )
 
 #Farmer List tab
 ################
@@ -370,7 +395,7 @@ ccc_fl = cc_fl
 #Sales Only
 ccc_so = ccc_is %>% 
   filter(!is.na(sold)) %>% 
-  select(week, producer, item, sold, archive_date, season, date)
+  select(week, producer, item, sold, archive_date, season, date, season_week)
 
 ```
 
