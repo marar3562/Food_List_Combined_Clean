@@ -53,7 +53,7 @@ is_14 = range_read(sheet_id_14
 #Master Item List tab
 mil_14 = range_read(sheet_id_14
                  ,sheet = 'master_item_list'
-                 ,col_types = 'cccccccnccD'
+                 ,col_types = 'cccccccnccnD'
 )
 
 #Share List tab
@@ -122,7 +122,7 @@ is_15 = range_read(sheet_id_15
 #Master Item List tab
 mil_15 = range_read(sheet_id_15
                  ,sheet = 'master_item_list'
-                 ,col_types = 'cccccccnccD'
+                 ,col_types = 'cccccccnccnD'
 )
 
 #Share List tab
