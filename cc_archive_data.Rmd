@@ -13,13 +13,15 @@ library(tidyverse)
 ## Sheets Connection
 
 ```{r}
-gs4_auth(email = "") 
+# gs4_auth(email = "") 
+gs4_auth(cache = ".secrets", email = TRUE, use_oob = TRUE)
 ```
-
 
 ## Season 14
 
 ```{r warning=FALSE}
+start_time = Sys.time()
+
 sheet_id_14 = "1m45w0hQOkvUFvNpc5MwQcN4snGs0Lkrb6kJfOUJf6tw"
 
 #Share Numbers tab
@@ -407,46 +409,139 @@ ccc_so = ccc_is %>%
 
 ## Upload Data to Google Sheets
 
+### Upload Function
+
+Had to create this since rate limits are now (Dec 16,2022) affecting uploads. 
+
+```{r eval=FALSE, include=FALSE}
+
+google_sheets_upload = function(data, sheet, tab, n_rows, sleep_sec) {
+  upload_rows = n_rows
+  max_loops = ceiling(nrow(data) / upload_rows)
+  st = 0
+  en = upload_rows
+  
+  start_time = Sys.time()
+  
+  for (i in 1:max_loops) {
+    # print(i)
+    if (i == 1) {
+      sheet_write(data |> slice((st+1):en), sheet, sheet = tab)
+      st = st+upload_rows
+      en = en+upload_rows
+      Sys.sleep(sleep_sec)
+      # print(st)
+      # print(en)
+    } else if (i == max_loops) {
+      sheet_append(ss = sheet, data |> slice((st+1):en), sheet = tab)
+    } else {
+      sheet_append(ss = sheet, data |> slice((st+1):en), sheet = tab)
+      st = st+upload_rows
+      en = en+upload_rows
+      Sys.sleep(sleep_sec)
+      # print(st)
+      # print(en)
+    }
+  }
+  end_time = Sys.time()
+  
+  start_time
+  end_time
+}
+
+
+```
+
+### Practice function
+
+```{r eval=FALSE, include=FALSE}
+upload_rows = 100
+max_loops = ceiling(nrow(ccc_sn) / upload_rows)
+st = 1
+en = upload_rows
+
+start_time = Sys.time()
+
+for (i in 1:max_loops) {
+  # print(i)
+  if (i == 1) {
+    sheet_write(ccc_sn |> slice((st+1):en), sheet_id_ccc, sheet = "share_numbers")
+    st = st+upload_rows
+    en = en+upload_rows
+    # print(st)
+    # print(en)
+  } else if (i == max_loops) {
+    sheet_append(ss = sheet_id_ccc, ccc_sn |> slice((st+1):en), sheet = "share_numbers")
+  } else {
+    sheet_append(ss = sheet_id_ccc, ccc_sn |> slice((st+1):en), sheet = "share_numbers")
+    st = st+upload_rows
+    en = en+upload_rows
+    # print(st)
+    # print(en)
+  }
+}
+end_time = Sys.time()
+
+start_time
+end_time
+```
+
+### Run Functions
+
 ```{r}
 sheet_id_ccc = "1xs8TAMrSsJuL_gou4y0DBH3IkaTH0eBn_pdboCGWFTI"
 
 #Share Numbers tab
 sheet_write(ccc_sn, sheet_id_ccc, sheet = "share_numbers")
+# google_sheets_upload(ccc_sn, sheet_id_ccc, "share_numbers", 50, 2)
 
 #Farmer Produce tab
 sheet_write(ccc_fp, sheet_id_ccc, sheet = "farm_produce")
+# google_sheets_upload(ccc_fp, sheet_id_ccc, "farm_produce", 200)
 
 #Weekly Share Lists tab
 sheet_write(ccc_wsl, sheet_id_ccc, sheet = "weekly_share_lists")
+# google_sheets_upload(ccc_wsl, sheet_id_ccc, "weekly_share_lists", 200)
 
 #Weekly Par tab
 ################
 
 #Inventory Sales tab
 sheet_write(ccc_is, sheet_id_ccc, sheet = "inv_sales")
+# google_sheets_upload(ccc_is, sheet_id_ccc, "inv_sales", 200)
 
 #Master Item List tab
 sheet_write(ccc_mil, sheet_id_ccc, sheet = "master_item_list")
+# google_sheets_upload(ccc_mil, sheet_id_ccc, "master_item_list", 200)
 
 #Share List tab
 ################
 sheet_write(ccc_sl, sheet_id_ccc, sheet = "share_list")
+# google_sheets_upload(ccc_sl, sheet_id_ccc, "share_list", 200)
 
 #Default Par tab
 ################
 
 #Share Rotation tab
 sheet_write(ccc_sr, sheet_id_ccc, sheet = "share_rotation")
+# google_sheets_upload(ccc_sr, sheet_id_ccc, "share_rotation", 200)
 
 #Farmer List tab
 ################
 sheet_write(ccc_fl, sheet_id_ccc, sheet = "farmer_list")
+# google_sheets_upload(ccc_fl, sheet_id_ccc, "farmer_list", 200)
 
 #Produce Per List tab
 ################
 
 ############# New Tables ############# 
 sheet_write(ccc_so, sheet_id_ccc, sheet = "sales_only")
+# google_sheets_upload(ccc_so, sheet_id_ccc, "sales_only", 200)
+
+end_time = Sys.time()
+
+start_time
+end_time
 ```
 
 ## Data Checks
