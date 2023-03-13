@@ -162,71 +162,166 @@ fl_15 = range_read(sheet_id_15
 rm(sheet_id_15)
 ```
 
+## Season 15
+
+```{r}
+sheet_id_16 = "1Jo2p-q4CBucAhYu3SWaCxjtLLAM26F8-RGcczwvOhqk"
+
+#Share Numbers tab
+sn_16 = range_read(sheet_id_16
+                ,sheet = 'share_numbers'
+                ,col_types = 'icccicD-'
+)
+
+#Farmer Produce tab
+fp_16 = range_read(sheet_id_16
+                ,sheet = 'farm_produce'
+                ,skip = 1
+                ,col_types = 'icccnnnnncD'
+)
+
+#Weekly Share Lists tab
+wsl_16 = range_read(sheet_id_16
+                 ,sheet = 'weekly_share_lists'
+                 ,col_types = 'iccicin--D'
+)
+
+#Weekly Par tab
+################
+
+#Inventory Sales tab
+is_16 = range_read(sheet_id_16
+                ,sheet = 'inv_sales'
+                ,col_types = 'iccccnnccD--'
+)
+
+#Master Item List tab
+mil_16 = range_read(sheet_id_16
+                 ,sheet = 'master_item_list'
+                 ,col_types = 'cccccccnccnD'
+)
+
+#Share List tab
+################
+sl_16 = range_read(sheet_id_16
+                ,sheet = 'share_list'
+                ,col_types = 'ccniD'
+)
+
+#Default Par tab
+################
+
+#Share Rotation tab
+sr_16 = range_read(sheet_id_16
+                ,sheet = 'share_rotation'
+                ,col_types = '----Dicic----------'
+)
+
+#Farmer List tab
+################
+fl_16 = range_read(sheet_id_16
+                ,sheet = 'farmer_list'
+                ,col_types = 'ccccccD'
+)
+
+#Produce Per List tab
+################
+
+#Storage Location tab
+################
+
+rm(sheet_id_16)
+```
+
 ## Combine Data
 
 ```{r}
 #Share Numbers tab
-c_sn = sn_14 %>% 
-  mutate(season = 's14') %>% 
-  bind_rows(sn_15 %>% 
+c_sn = sn_14 |> 
+  mutate(season = 's14') |> 
+  bind_rows(sn_15 |> 
               mutate(season = 's15')
-            )
+            ) |> 
+  bind_rows(sn_16 |> 
+              mutate(season = 's16')
+            ) 
 
 #Farmer Produce tab
-c_fp = fp_14 %>% 
-  mutate(season = 's14') %>% 
-  bind_rows(fp_15 %>% 
+c_fp = fp_14 |> 
+  mutate(season = 's14') |> 
+  bind_rows(fp_15 |> 
               mutate(season = 's15')
+            ) |> 
+  bind_rows(fp_16 |> 
+              mutate(season = 's16')
             )
 
 #Weekly Share Lists tab
-c_wsl = wsl_14 %>% 
-  mutate(season = 's14') %>% 
-  bind_rows(wsl_15 %>% 
+c_wsl = wsl_14 |> 
+  mutate(season = 's14') |> 
+  bind_rows(wsl_15 |> 
               mutate(season = 's15')
+            ) |> 
+  bind_rows(wsl_16 |> 
+              mutate(season = 's16')
             )
 
 #Weekly Par tab
 ################
 
 #Inventory Sales tab
-c_is = is_14 %>% 
-  mutate(season = 's14') %>% 
-  bind_rows(is_15 %>% 
+c_is = is_14 |> 
+  mutate(season = 's14') |> 
+  bind_rows(is_15 |> 
               mutate(season = 's15')
+            ) |> 
+  bind_rows(is_16 |> 
+              mutate(season = 's16')
             )
 
 #Master Item List tab
-c_mil = mil_14 %>% 
-  mutate(season = 's14') %>% 
-  bind_rows(mil_15 %>% 
+c_mil = mil_14 |> 
+  mutate(season = 's14') |> 
+  bind_rows(mil_15 |> 
               mutate(season = 's15')
+            ) |> 
+  bind_rows(mil_16 |> 
+              mutate(season = 's16')
             )
 
 #Share List tab
 ################
-c_sl = sl_14 %>% 
-  mutate(season = 's14') %>% 
-  bind_rows(sl_15 %>% 
+c_sl = sl_14 |> 
+  mutate(season = 's14') |> 
+  bind_rows(sl_15 |> 
               mutate(season = 's15')
+            ) |> 
+  bind_rows(sl_16 |> 
+              mutate(season = 's16')
             )
 
 #Default Par tab
 ################
 
 #Share Rotation tab
-c_sr = sr_14 %>% 
-  mutate(season = 's14') %>% 
-  bind_rows(sr_15 %>% 
+c_sr = sr_14 |> 
+  mutate(season = 's14') |> 
+  bind_rows(sr_15 |> 
               mutate(season = 's15')
+            ) |> 
+  bind_rows(sr_16 |> 
+              mutate(season = 's16')
             )
 
 #Farmer List tab
 ################
-c_fl = fl_14 %>% 
-  mutate(season = 's14') %>% 
-  bind_rows(fl_15 %>% 
+c_fl = fl_14 |> 
+  mutate(season = 's14') |> 
+  bind_rows(fl_15 |> 
               mutate(season = 's15')
+            ) |> 
+  bind_rows(fl_16 |> 
+              mutate(season = 's16')
             )
 
 #Produce Per List tab
@@ -237,80 +332,80 @@ c_fl = fl_14 %>%
 
 ```{r}
 #Share Numbers tab
-cc_sn = c_sn %>% 
-  rename_all(tolower) %>% 
-  select_all(list(~gsub(" ", "_", .))) %>% 
+cc_sn = c_sn |> 
+  rename_all(tolower) |> 
+  select_all(list(~gsub(" ", "_", .))) |> 
   filter(!is.na(week))
 
 #Farmer Produce tab
-cc_fp_v1 = c_fp %>% 
-  rename_all(tolower) %>% 
-  select_all(list(~gsub(" ", "_", .))) %>% 
+cc_fp_v1 = c_fp |> 
+  rename_all(tolower) |> 
+  select_all(list(~gsub(" ", "_", .))) |> 
   mutate(av_min = ifelse(is.na(av_min), 0, av_min)
          ,av_max = ifelse(is.na(av_max), 0, av_max)
          ,order = ifelse(is.na(order), 0, order)
          ,store = ifelse(is.na(store), 0, store)
-         ,store_note = ifelse(is.na(store_note), '', store_note)) %>% 
+         ,store_note = ifelse(is.na(store_note), '', store_note)) |> 
   mutate(clean = ifelse(av_min > 0 | av_max > 0 | order > 0 | store > 0 | store_note != '', 1, 0)) 
 
-stopifnot(cc_fp_v1 %>% filter(is.na(clean)) %>% summarise(n = n()) %>% pull == 0)
+stopifnot(cc_fp_v1 |> filter(is.na(clean)) |> summarise(n = n()) |> pull() == 0)
 
-cc_fp = cc_fp_v1 %>% 
-  filter(!is.na(item)) %>% 
-  filter(clean == 1) %>% 
-  select(-clean) %>% 
+cc_fp = cc_fp_v1 |> 
+  filter(!is.na(item)) |> 
+  filter(clean == 1) |> 
+  select(-clean) |> 
   mutate(store_note = ifelse(store_note == '', NA, store_note))
 
 #Weekly Share Lists tab
-cc_wsl = c_wsl %>% 
-  rename_all(tolower) %>% 
-  select_all(list(~gsub(" ", "_", .))) %>% 
+cc_wsl = c_wsl |> 
+  rename_all(tolower) |> 
+  select_all(list(~gsub(" ", "_", .))) |> 
   filter(!is.na(item) & !is.na(week) & !is.na(item_nu))
 
 #Weekly Par tab
 ################
 
 #Inventory Sales tab
-cc_is_v1 = c_is %>% 
-  rename_all(tolower) %>% 
-  select_all(list(~gsub(" ", "_", .))) %>% 
-  rename(invent_manual = invent._manual) %>% 
+cc_is_v1 = c_is |> 
+  rename_all(tolower) |> 
+  select_all(list(~gsub(" ", "_", .))) |> 
+  rename(invent_manual = invent._manual) |> 
   mutate(invent_from_farmigo = ifelse(is.na(invent_from_farmigo), 0, invent_from_farmigo)
          ,invent_manual = ifelse(is.na(invent_manual), 0, invent_manual)
          ,clean = ifelse(invent_from_farmigo > 0 | invent_manual > 0 | !is.na(inventory_note) | !is.na(sold), 1, 0) 
          )
 
-stopifnot(cc_is_v1 %>% filter(is.na(clean)) %>% summarise(n = n()) %>% pull == 0)
+stopifnot(cc_is_v1 |> filter(is.na(clean)) |> summarise(n = n()) |> pull() == 0)
 
-cc_is = cc_is_v1 %>% 
-  filter(clean == 1) %>% 
+cc_is = cc_is_v1 |> 
+  filter(clean == 1) |> 
   select(-clean)
 
 #Master Item List tab
-cc_mil = c_mil %>% 
-  rename_all(tolower) %>% 
-  select_all(list(~gsub(" ", "_", .))) %>% 
+cc_mil = c_mil |> 
+  rename_all(tolower) |> 
+  select_all(list(~gsub(" ", "_", .))) |> 
   filter(!is.na(category) | !is.na(type) | !is.na(preferred_per_value))
 
 #Share List tab
 ################
-cc_sl = c_sl %>% 
-  rename_all(tolower) %>% 
+cc_sl = c_sl |> 
+  rename_all(tolower) |> 
   select_all(list(~gsub(" ", "_", .))) 
 
 #Default Par tab
 ################
 
 #Share Rotation tab
-cc_sr = c_sr %>% 
-  rename_all(tolower) %>% 
-  select_all(list(~gsub(" ", "_", .))) %>% 
+cc_sr = c_sr |> 
+  rename_all(tolower) |> 
+  select_all(list(~gsub(" ", "_", .))) |> 
   rename(week = 'week_#') 
 
 #Farmer List tab
 ################
-cc_fl = c_fl %>% 
-  rename_all(tolower) %>% 
+cc_fl = c_fl |> 
+  rename_all(tolower) |> 
   select_all(list(~gsub(" ", "_", .))) 
 
 #Produce Per List tab
@@ -321,11 +416,11 @@ cc_fl = c_fl %>%
 
 ```{r}
 #Share Numbers tab
-ccc_sn = cc_sn %>% 
-  left_join(cc_sr %>% 
-              select(season, week, date) %>% 
+ccc_sn = cc_sn |> 
+  left_join(cc_sr |> 
+              select(season, week, date) |> 
               distinct()
-            , by = c('season','week')) %>% 
+            , by = c('season','week')) |> 
   mutate(season_week = paste0(str_replace(season,'s',''),'.',
                               ifelse(week < 0, '-01',
                                      ifelse(str_length(week)==1,paste0('0',week),week))
@@ -333,11 +428,11 @@ ccc_sn = cc_sn %>%
          )
 
 #Farmer Produce tab
-ccc_fp = cc_fp %>% 
-  left_join(cc_sr %>% 
-              select(season, week, date) %>% 
+ccc_fp = cc_fp |> 
+  left_join(cc_sr |> 
+              select(season, week, date) |> 
               distinct()
-            , by = c('season','week')) %>% 
+            , by = c('season','week')) |> 
   mutate(season_week = paste0(str_replace(season,'s',''),'.',
                               ifelse(week < 0, '-01',
                                      ifelse(str_length(week)==1,paste0('0',week),week))
@@ -345,11 +440,11 @@ ccc_fp = cc_fp %>%
          )
 
 #Weekly Share Lists tab
-ccc_wsl = cc_wsl %>% 
-  left_join(cc_sr %>% 
-              select(season, week, date) %>% 
+ccc_wsl = cc_wsl |> 
+  left_join(cc_sr |> 
+              select(season, week, date) |> 
               distinct()
-            , by = c('season','week')) %>% 
+            , by = c('season','week')) |> 
   mutate(season_week = paste0(str_replace(season,'s',''),'.',
                               ifelse(week < 0, '-01',
                                      ifelse(str_length(week)==1,paste0('0',week),week))
@@ -360,11 +455,11 @@ ccc_wsl = cc_wsl %>%
 ################
 
 #Inventory Sales tab
-ccc_is = cc_is  %>% 
-  left_join(cc_sr %>% 
-              select(season, week, date) %>% 
+ccc_is = cc_is  |> 
+  left_join(cc_sr |> 
+              select(season, week, date) |> 
               distinct()
-            , by = c('season','week')) %>% 
+            , by = c('season','week')) |> 
   mutate(season_week = paste0(str_replace(season,'s',''),'.',
                               ifelse(week < 0, '-01',
                                      ifelse(str_length(week)==1,paste0('0',week),week))
@@ -382,7 +477,7 @@ ccc_sl = cc_sl
 ################
 
 #Share Rotation tab
-ccc_sr = cc_sr %>% 
+ccc_sr = cc_sr |> 
   mutate(season_week = paste0(str_replace(season,'s',''),'.',
                               ifelse(week < 0, '-01',
                                      ifelse(str_length(week)==1,paste0('0',week),week))
@@ -401,8 +496,8 @@ ccc_fl = cc_fl
 
 ```{r}
 #Sales Only
-ccc_so = ccc_is %>% 
-  filter(!is.na(sold)) %>% 
+ccc_so = ccc_is |> 
+  filter(!is.na(sold)) |> 
   select(week, producer, item, sold, archive_date, season, date, season_week)
 
 ```
