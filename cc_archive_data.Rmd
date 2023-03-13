@@ -44,7 +44,11 @@ wsl_14 = range_read(sheet_id_14
 )
 
 #Weekly Par tab
-################
+wp_14 = range_read(sheet_id_14
+                 ,sheet = 'weekly_par'
+                 ,skip = 1
+                 ,col_types = 'iccnccicD'
+)
 
 #Inventory Sales tab
 is_14 = range_read(sheet_id_14
@@ -116,7 +120,11 @@ wsl_15 = range_read(sheet_id_15
 )
 
 #Weekly Par tab
-################
+wp_15 = range_read(sheet_id_15
+                 ,sheet = 'weekly_par'
+                 ,skip = 1
+                 ,col_types = 'iccnccicD'
+)
 
 #Inventory Sales tab
 is_15 = range_read(sheet_id_15
@@ -187,7 +195,11 @@ wsl_16 = range_read(sheet_id_16
 )
 
 #Weekly Par tab
-################
+wp_16 = range_read(sheet_id_16
+                 ,sheet = 'weekly_par'
+                 ,skip = 1
+                 ,col_types = 'iccnccicD'
+)
 
 #Inventory Sales tab
 is_16 = range_read(sheet_id_16
@@ -267,7 +279,14 @@ c_wsl = wsl_14 |>
             )
 
 #Weekly Par tab
-################
+c_wp = wp_14 |> 
+  mutate(season = 's14') |> 
+  bind_rows(wp_15 |> 
+              mutate(season = 's15')
+            ) |> 
+  bind_rows(wp_16 |> 
+              mutate(season = 's16')
+            )
 
 #Inventory Sales tab
 c_is = is_14 |> 
@@ -363,10 +382,7 @@ cc_wsl = c_wsl |>
   filter(!is.na(item) & !is.na(week) & !is.na(item_nu))
 
 #Weekly Par tab
-################
-
-#Inventory Sales tab
-cc_is_v1 = c_is |> 
+cc_wp = c_wp |> 
   rename_all(tolower) |> 
   select_all(list(~gsub(" ", "_", .))) |> 
   rename(invent_manual = invent._manual) |> 
@@ -374,6 +390,20 @@ cc_is_v1 = c_is |>
          ,invent_manual = ifelse(is.na(invent_manual), 0, invent_manual)
          ,clean = ifelse(invent_from_farmigo > 0 | invent_manual > 0 | !is.na(inventory_note) | !is.na(sold), 1, 0) 
          )
+
+stopifnot(cc_is_v1 |> filter(is.na(clean)) |> summarise(n = n()) |> pull() == 0)
+
+#Inventory Sales tab
+cc_is_v1 = c_is |> 
+  rename_all(tolower) |> 
+  select_all(list(~gsub(" ", "_", .))) |> 
+  rename(week = week_start) #|> 
+  # mutate(invent_from_farmigo = ifelse(is.na(invent_from_farmigo), 0, invent_from_farmigo)
+  #        ,invent_manual = ifelse(is.na(invent_manual), 0, invent_manual)
+  #        ,clean = ifelse(invent_from_farmigo > 0 | invent_manual > 0 | !is.na(inventory_note) | !is.na(sold), 1, 0) 
+  #        )
+
+### STOPPED HERE! NEED TO DECIDE HOW TO CLEAN THIS UP AND WHAT TO REMOVE. MOST LIKELY WILL NEED A CLEAN/REDUCED VERSION TO REDUCE DATA 
 
 stopifnot(cc_is_v1 |> filter(is.na(clean)) |> summarise(n = n()) |> pull() == 0)
 
