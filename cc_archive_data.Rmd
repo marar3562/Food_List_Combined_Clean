@@ -389,7 +389,7 @@ cc_wp = c_wp |>
   filter(!is.na(item) & !is.na(week) & !is.na(producer)) 
 
 #Inventory Sales tab
-cc_is_v1 = c_is |> 
+cc_is = c_is |> 
   rename_all(tolower) |> 
   select_all(list(~gsub(" ", "_", .))) |> 
   rename(invent_manual = invent._manual) |> 
@@ -398,11 +398,11 @@ cc_is_v1 = c_is |>
          ,clean = ifelse(invent_from_farmigo > 0 | invent_manual > 0 | !is.na(inventory_note) | !is.na(sold), 1, 0)
          )
 
-stopifnot(cc_is_v1 |> filter(is.na(clean)) |> summarise(n = n()) |> pull() == 0)
+stopifnot(cc_is |> filter(is.na(clean)) |> summarise(n = n()) |> pull() == 0)
 
-cc_is = cc_is_v1 |> 
-  filter(clean == 1) |> 
-  select(-clean)
+# cc_is = cc_is_v1 |> 
+#   filter(clean == 1) |> 
+#   select(-clean)
 
 #Master Item List tab
 cc_mil = c_mil |> 
@@ -528,8 +528,15 @@ ccc_fl = cc_fl
 ## Create new data sets
 
 ```{r}
+#Clean version
+ccc_is_cl = ccc_is |> 
+  filter(clean == 1) |> 
+  select(-clean)
+
 #Sales Only
 ccc_so = ccc_is |> 
+  filter(clean == 1) |> 
+  select(-clean) |> 
   filter(!is.na(sold)) |> 
   select(week, producer, item, sold, archive_date, season, date, season_week)
 
@@ -635,7 +642,9 @@ sheet_write(ccc_wsl, sheet_id_ccc, sheet = "weekly_share_lists")
 sheet_write(ccc_wp, sheet_id_ccc, sheet = "weekly_par")
 
 #Inventory Sales tab
-sheet_write(ccc_is, sheet_id_ccc, sheet = "inv_sales")
+sheet_write(ccc_is |> 
+              select(-clean)
+  , sheet_id_ccc, sheet = "inv_sales")
 # google_sheets_upload(ccc_is, sheet_id_ccc, "inv_sales", 200)
 
 #Master Item List tab
@@ -663,6 +672,10 @@ sheet_write(ccc_fl, sheet_id_ccc, sheet = "farmer_list")
 ################
 
 ############# New Tables ############# 
+#Clean Inv Sales tab
+sheet_write(ccc_is_cl, sheet_id_ccc, sheet = "inv_sales_clean")
+
+#Sales Only tab
 sheet_write(ccc_so, sheet_id_ccc, sheet = "sales_only")
 # google_sheets_upload(ccc_so, sheet_id_ccc, "sales_only", 200)
 
