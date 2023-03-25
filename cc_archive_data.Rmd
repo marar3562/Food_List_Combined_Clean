@@ -385,25 +385,18 @@ cc_wsl = c_wsl |>
 cc_wp = c_wp |> 
   rename_all(tolower) |> 
   select_all(list(~gsub(" ", "_", .))) |> 
-  rename(invent_manual = invent._manual) |> 
-  mutate(invent_from_farmigo = ifelse(is.na(invent_from_farmigo), 0, invent_from_farmigo)
-         ,invent_manual = ifelse(is.na(invent_manual), 0, invent_manual)
-         ,clean = ifelse(invent_from_farmigo > 0 | invent_manual > 0 | !is.na(inventory_note) | !is.na(sold), 1, 0) 
-         )
-
-stopifnot(cc_is_v1 |> filter(is.na(clean)) |> summarise(n = n()) |> pull() == 0)
+  rename(week = wk_start) |> 
+  filter(!is.na(item) & !is.na(week) & !is.na(producer)) 
 
 #Inventory Sales tab
 cc_is_v1 = c_is |> 
   rename_all(tolower) |> 
   select_all(list(~gsub(" ", "_", .))) |> 
-  rename(week = week_start) #|> 
-  # mutate(invent_from_farmigo = ifelse(is.na(invent_from_farmigo), 0, invent_from_farmigo)
-  #        ,invent_manual = ifelse(is.na(invent_manual), 0, invent_manual)
-  #        ,clean = ifelse(invent_from_farmigo > 0 | invent_manual > 0 | !is.na(inventory_note) | !is.na(sold), 1, 0) 
-  #        )
-
-### STOPPED HERE! NEED TO DECIDE HOW TO CLEAN THIS UP AND WHAT TO REMOVE. MOST LIKELY WILL NEED A CLEAN/REDUCED VERSION TO REDUCE DATA 
+  rename(invent_manual = invent._manual) |> 
+  mutate(invent_from_farmigo = ifelse(is.na(invent_from_farmigo), 0, invent_from_farmigo)
+         ,invent_manual = ifelse(is.na(invent_manual), 0, invent_manual)
+         ,clean = ifelse(invent_from_farmigo > 0 | invent_manual > 0 | !is.na(inventory_note) | !is.na(sold), 1, 0)
+         )
 
 stopifnot(cc_is_v1 |> filter(is.na(clean)) |> summarise(n = n()) |> pull() == 0)
 
@@ -483,6 +476,16 @@ ccc_wsl = cc_wsl |>
 
 #Weekly Par tab
 ################
+ccc_wp = cc_wp  |> 
+  left_join(cc_sr |> 
+              select(season, week, date) |> 
+              distinct()
+            , by = c('season','week')) |> 
+  mutate(season_week = paste0(str_replace(season,'s',''),'.',
+                              ifelse(week < 0, '-01',
+                                     ifelse(str_length(week)==1,paste0('0',week),week))
+                              )
+         )
 
 #Inventory Sales tab
 ccc_is = cc_is  |> 
@@ -629,7 +632,7 @@ sheet_write(ccc_wsl, sheet_id_ccc, sheet = "weekly_share_lists")
 # google_sheets_upload(ccc_wsl, sheet_id_ccc, "weekly_share_lists", 200)
 
 #Weekly Par tab
-################
+sheet_write(ccc_wp, sheet_id_ccc, sheet = "weekly_par")
 
 #Inventory Sales tab
 sheet_write(ccc_is, sheet_id_ccc, sheet = "inv_sales")
