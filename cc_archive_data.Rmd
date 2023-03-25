@@ -396,7 +396,8 @@ cc_is = c_is |>
   mutate(invent_from_farmigo = ifelse(is.na(invent_from_farmigo), 0, invent_from_farmigo)
          ,invent_manual = ifelse(is.na(invent_manual), 0, invent_manual)
          ,clean = ifelse(invent_from_farmigo > 0 | invent_manual > 0 | !is.na(inventory_note) | !is.na(sold), 1, 0)
-         )
+         ) |> 
+  filter(!is.na(item) & !is.na(week) & !is.na(producer))
 
 stopifnot(cc_is |> filter(is.na(clean)) |> summarise(n = n()) |> pull() == 0)
 
