@@ -1,0 +1,78 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(stringr)
+```
+
+
+```{r}
+max_date = ccc_mil |> 
+  summarize(max_date = max(snapshot_date)) |> 
+  pull()
+
+
+test = ccc_is |> 
+  filter(date > '2023-03-19') |> 
+  left_join(ccc_mil |> 
+              filter(snapshot_date == max_date) |> 
+              select(item, category) |> 
+              distinct()
+            , by = c('item')
+            ) |> 
+  filter(!category %in% c('Produce - Vegetables','Bakery')
+         & !is.na(invent_manual)
+         & !str_detect(item,'Eggs ')
+         & week != 2) |> 
+  mutate(difference = invent_manual - invent_from_farmigo
+         , perct_diff = ifelse(invent_manual == 0 & invent_from_farmigo > 0, 100,
+                               ifelse(invent_manual > 0 & invent_from_farmigo == 0, -100, 
+                                      ifelse(invent_manual == 0 & invent_from_farmigo == 0, 0, (difference/invent_manual)*100))))
+
+test |> 
+  head(1000)
+
+boxplot(test$difference)
+boxplot(test$difference~test$location1)
+
+summary(test$difference)
+quantile(test$difference, c(0.05, 0.1, 0.9, 0.95))
+
+test |> 
+  group_by(location1) |> 
+  summarise(rows = n()
+            , avg_difference = mean(difference)
+            , max_difference = max(difference)
+            , prct_05_diff = quantile(difference, 0.05)
+            , prct_10_diff = quantile(difference, 0.10)
+            , prct_25_diff = quantile(difference, 0.25)
+            , prct_50_diff = quantile(difference, 0.5)
+            , prct_75_diff = quantile(difference, 0.75)
+            , prct_90_diff = quantile(difference, 0.90)
+            , prct_95_diff = quantile(difference, 0.95)
+            , stdev_diff = sd(difference))
+
+boxplot(test$perct_diff)
+boxplot(test$perct_diff~test$location1)
+
+summary(test$perct_diff)
+quantile(test$perct_diff, c(0.05, 0.1, 0.9, 0.95))
+
+test |> 
+  group_by(location1) |> 
+  summarise(rows = n()
+            , avg_difference = mean(perct_diff)
+            , max_difference = max(perct_diff)
+            , prct_05_diff = quantile(perct_diff, 0.05)
+            , prct_10_diff = quantile(perct_diff, 0.10)
+            , prct_25_diff = quantile(perct_diff, 0.25)
+            , prct_50_diff = quantile(perct_diff, 0.5)
+            , prct_75_diff = quantile(perct_diff, 0.75)
+            , prct_90_diff = quantile(perct_diff, 0.90)
+            , prct_95_diff = quantile(perct_diff, 0.95)
+            , stdev_diff = sd(perct_diff))
+```
+
+
