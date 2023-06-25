@@ -53,7 +53,7 @@ wp_14 = range_read(sheet_id_14
 #Inventory Sales tab
 is_14 = range_read(sheet_id_14
                 ,sheet = 'inv_sales'
-                ,col_types = 'iccccnnccD--'
+                ,col_types = 'iccccnncnccD--'
 )
 
 #Master Item List tab
@@ -129,7 +129,7 @@ wp_15 = range_read(sheet_id_15
 #Inventory Sales tab
 is_15 = range_read(sheet_id_15
                 ,sheet = 'inv_sales'
-                ,col_types = 'iccccnnccD--'
+                ,col_types = 'iccccnncnccD--'
 )
 
 #Master Item List tab
@@ -204,7 +204,7 @@ wp_16 = range_read(sheet_id_16
 #Inventory Sales tab
 is_16 = range_read(sheet_id_16
                 ,sheet = 'inv_sales'
-                ,col_types = 'iccccnnccD--'
+                ,col_types = 'iccccnncnccD--'
 )
 
 #Master Item List tab
