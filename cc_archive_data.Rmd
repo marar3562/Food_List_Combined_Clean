@@ -365,7 +365,8 @@ cc_fp_v1 = c_fp |>
          ,order = ifelse(is.na(order), 0, order)
          ,store = ifelse(is.na(store), 0, store)
          ,store_note = ifelse(is.na(store_note), '', store_note)) |> 
-  mutate(clean = ifelse(av_min > 0 | av_max > 0 | order > 0 | store > 0 | store_note != '', 1, 0)) 
+  mutate(clean = ifelse(av_min > 0 | av_max > 0 | cost > 0 | order > 0 | store > 0 | store_note != '', 1, 0),
+         clean = ifelse(is.na(cost), 0, clean)) 
 
 stopifnot(cc_fp_v1 |> filter(is.na(clean)) |> summarise(n = n()) |> pull() == 0)
 
@@ -394,10 +395,11 @@ cc_is = c_is |>
   select_all(list(~gsub(" ", "_", .))) |> 
   rename(invent_manual = invent._manual) |> 
   mutate(invent_from_farmigo = ifelse(is.na(invent_from_farmigo), 0, invent_from_farmigo)
-         ,invent_manual = ifelse(is.na(invent_manual), 0, invent_manual)
-         ,clean = ifelse(invent_from_farmigo > 0 | invent_manual > 0 | !is.na(inventory_note) | !is.na(sold), 1, 0)
+         # ,invent_manual = ifelse(is.na(invent_manual), 0, invent_manual)
+         ,clean = ifelse(invent_from_farmigo > 0 | invent_manual > 0 | !is.na(inventory_note) | !is.na(sold), 1, 0),
+         clean = ifelse(is.na(invent_manual), 0, clean)
          ) |> 
-  filter(!is.na(item) & !is.na(week) & !is.na(producer))
+  filter(!is.na(item) & !is.na(week)) # & !is.na(producer)
 
 stopifnot(cc_is |> filter(is.na(clean)) |> summarise(n = n()) |> pull() == 0)
 
@@ -684,6 +686,9 @@ end_time = Sys.time()
 
 start_time
 end_time
+
+rm(sheet_id_ccc)
+gs4_deauth()
 ```
 
 ## Data Checks
