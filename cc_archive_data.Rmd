@@ -75,7 +75,7 @@ sl_14 = range_read(sheet_id_14
 #Share Rotation tab
 sr_14 = range_read(sheet_id_14
                 ,sheet = 'share_rotation'
-                ,col_types = '----Dicic----------'
+                ,col_types = '----Dicicn-----------'
 )
 
 #Farmer List tab
@@ -151,7 +151,7 @@ sl_15 = range_read(sheet_id_15
 #Share Rotation tab
 sr_15 = range_read(sheet_id_15
                 ,sheet = 'share_rotation'
-                ,col_types = '----Dicic----------'
+                ,col_types = '----Dicicn-----------'
 )
 
 #Farmer List tab
@@ -226,7 +226,7 @@ sl_16 = range_read(sheet_id_16
 #Share Rotation tab
 sr_16 = range_read(sheet_id_16
                 ,sheet = 'share_rotation'
-                ,col_types = '----Dicic----------'
+                ,col_types = '----Dicicn-----------'
 )
 
 #Farmer List tab
@@ -302,7 +302,7 @@ sl_17 = range_read(sheet_id_17
 #Share Rotation tab
 sr_17 = range_read(sheet_id_17
                 ,sheet = 'share_rotation'
-                ,col_types = '----Dicic----------'
+                ,col_types = '----Dicicn-----------'
 )
 
 #Farmer List tab
