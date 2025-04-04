@@ -34,7 +34,7 @@ sn_14 = range_read(sheet_id_14
 fp_14 = range_read(sheet_id_14
                 ,sheet = 'farm_produce'
                 ,skip = 1
-                ,col_types = 'icccnnnnncD'
+                ,col_types = 'icccnnnnnncD'
 )
 
 #Weekly Share Lists tab
@@ -82,7 +82,7 @@ sr_14 = range_read(sheet_id_14
 ################
 fl_14 = range_read(sheet_id_14
                 ,sheet = 'farmer_list'
-                ,col_types = 'ccccccD'
+                ,col_types = 'cccccccD'
 )
 
 #Produce Per List tab
@@ -110,7 +110,7 @@ sn_15 = range_read(sheet_id_15
 fp_15 = range_read(sheet_id_15
                 ,sheet = 'farm_produce'
                 ,skip = 1
-                ,col_types = 'icccnnnnncD'
+                ,col_types = 'icccnnnnnncD'
 )
 
 #Weekly Share Lists tab
@@ -158,7 +158,7 @@ sr_15 = range_read(sheet_id_15
 ################
 fl_15 = range_read(sheet_id_15
                 ,sheet = 'farmer_list'
-                ,col_types = 'ccccccD'
+                ,col_types = 'cccccccD'
 )
 
 #Produce Per List tab
@@ -185,7 +185,7 @@ sn_16 = range_read(sheet_id_16
 fp_16 = range_read(sheet_id_16
                 ,sheet = 'farm_produce'
                 ,skip = 1
-                ,col_types = 'icccnnnnncD'
+                ,col_types = 'icccnnnnnncD'
 )
 
 #Weekly Share Lists tab
@@ -233,7 +233,7 @@ sr_16 = range_read(sheet_id_16
 ################
 fl_16 = range_read(sheet_id_16
                 ,sheet = 'farmer_list'
-                ,col_types = 'ccccccD'
+                ,col_types = 'cccccccD'
 )
 
 #Produce Per List tab
@@ -261,7 +261,7 @@ sn_17 = range_read(sheet_id_17
 fp_17 = range_read(sheet_id_17
                 ,sheet = 'farm_produce'
                 ,skip = 1
-                ,col_types = 'icccnnnnncD'
+                ,col_types = 'icccnnnnnncD'
 )
 
 #Weekly Share Lists tab
@@ -309,7 +309,7 @@ sr_17 = range_read(sheet_id_17
 ################
 fl_17 = range_read(sheet_id_17
                 ,sheet = 'farmer_list'
-                ,col_types = 'ccccccD'
+                ,col_types = 'cccccccD'
 )
 
 #Produce Per List tab
@@ -323,7 +323,7 @@ rm(sheet_id_17)
 ## Season 18
 
 ```{r}
-sheet_id_18 = "1mRsOMesvX_aRKDll9KiWH0AU5TngAvs3qAmodmdsrAc"
+sheet_id_18 = "1XpLuuzsK36o1jOqYsPBC8DFlu3c0PrJAGtbYprajETU"
 
 #Share Numbers tab
 sn_18 = range_read(sheet_id_18
@@ -335,7 +335,7 @@ sn_18 = range_read(sheet_id_18
 fp_18 = range_read(sheet_id_18
                 ,sheet = 'farm_produce'
                 ,skip = 1
-                ,col_types = 'icccnnnnncD'
+                ,col_types = 'icccnnnnnncD'
 )
 
 #Weekly Share Lists tab
@@ -383,7 +383,7 @@ sr_18 = range_read(sheet_id_18
 ################
 fl_18 = range_read(sheet_id_18
                 ,sheet = 'farmer_list'
-                ,col_types = 'ccccccD'
+                ,col_types = 'cccccccD'
 )
 
 #Produce Per List tab
