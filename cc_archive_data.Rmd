@@ -831,6 +831,61 @@ start_time
 end_time
 ```
 
+### Google Sheet Data Limit Check
+
+Google sheets has a cell limit of 10Million. I should build in checks to all large data sets, like this a check for row/column size, multiplied by each other, to show a percentage of that 10 Million limit. 
+
+```{r}
+#Share Numbers tab
+cell_count_ccc_sn = dim(ccc_sn)[1]*dim(ccc_sn)[2]
+print(paste0('percentage filled to Google Sheets maximum cell count (Share Numbers) ',(cell_count_ccc_sn / 10000000)*100, '%'))
+stopifnot(cell_count_ccc_sn <= 10000000)
+
+#Farmer Produce tab
+cell_count_ccc_fp = dim(ccc_fp)[1]*dim(ccc_fp)[2]
+print(paste0('percentage filled to Google Sheets maximum cell count (Farmer Produce) ',(cell_count_ccc_fp / 10000000)*100, '%'))
+stopifnot(cell_count_ccc_fp <= 10000000)
+
+#Weekly Share Lists tab
+cell_count_ccc_wsl = dim(ccc_wsl)[1]*dim(ccc_wsl)[2]
+print(paste0('percentage filled to Google Sheets maximum cell count (Weekly Share List) ',(cell_count_ccc_wsl / 10000000)*100, '%'))
+stopifnot(cell_count_ccc_wsl <= 10000000)
+
+#Weekly Par tab
+cell_count_ccc_wp = dim(ccc_wp)[1]*dim(ccc_wp)[2]
+print(paste0('percentage filled to Google Sheets maximum cell count (Weekly Par) ',(cell_count_ccc_wp / 10000000)*100, '%'))
+stopifnot(cell_count_ccc_wp <= 10000000)
+
+#Inventory Sales tab
+cell_count_ccc_is_clean = dim(ccc_is |> select(-clean))[1]*dim(ccc_is |> select(-clean))[2]
+print(paste0('percentage filled to Google Sheets maximum cell count (Inventory Sales Clean) ',(cell_count_ccc_is_clean / 10000000)*100, '%'))
+stopifnot(cell_count_ccc_is_clean <= 10000000)
+
+#Master Item List tab
+cell_count_ccc_mil = dim(ccc_mil)[1]*dim(ccc_mil)[2]
+print(paste0('percentage filled to Google Sheets maximum cell count (Master Item List) ',(cell_count_ccc_mil / 10000000)*100, '%'))
+stopifnot(cell_count_ccc_mil <= 10000000)
+
+#Share List tab
+cell_count_ccc_sl = dim(ccc_sl)[1]*dim(ccc_sl)[2]
+print(paste0('percentage filled to Google Sheets maximum cell count (Share List) ',(cell_count_ccc_sl / 10000000)*100, '%'))
+stopifnot(cell_count_ccc_sl <= 10000000)
+
+#Default Par tab
+################
+
+#Share Rotation tab
+cell_count_ccc_sr = dim(ccc_sr)[1]*dim(ccc_sr)[2]
+print(paste0('percentage filled to Google Sheets maximum cell count (Share Rotation) ',(cell_count_ccc_sr / 10000000)*100, '%'))
+stopifnot(cell_count_ccc_sr <= 10000000)
+
+#Farmer List tab
+cell_count_ccc_fl = dim(ccc_fl)[1]*dim(ccc_fl)[2]
+print(paste0('percentage filled to Google Sheets maximum cell count (Farmer List) ',(cell_count_ccc_fl / 10000000)*100, '%'))
+stopifnot(cell_count_ccc_fl <= 10000000)
+
+```
+
 ### Run Functions
 
 ```{r}
@@ -862,7 +917,6 @@ sheet_write(ccc_mil, sheet_id_ccc, sheet = "master_item_list")
 # google_sheets_upload(ccc_mil, sheet_id_ccc, "master_item_list", 200)
 
 #Share List tab
-################
 sheet_write(ccc_sl, sheet_id_ccc, sheet = "share_list")
 # google_sheets_upload(ccc_sl, sheet_id_ccc, "share_list", 200)
 
@@ -874,7 +928,6 @@ sheet_write(ccc_sr, sheet_id_ccc, sheet = "share_rotation")
 # google_sheets_upload(ccc_sr, sheet_id_ccc, "share_rotation", 200)
 
 #Farmer List tab
-################
 sheet_write(ccc_fl, sheet_id_ccc, sheet = "farmer_list")
 # google_sheets_upload(ccc_fl, sheet_id_ccc, "farmer_list", 200)
 
