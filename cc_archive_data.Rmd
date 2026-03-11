@@ -903,8 +903,11 @@ sheet_write(ccc_fp, sheet_id_ccc, sheet = "farm_produce")
 sheet_write(ccc_wsl, sheet_id_ccc, sheet = "weekly_share_lists")
 # google_sheets_upload(ccc_wsl, sheet_id_ccc, "weekly_share_lists", 200)
 
+
+
 #Weekly Par tab
 sheet_write(ccc_wp, sheet_id_ccc, sheet = "weekly_par")
+
 
 #Inventory Sales tab
 sheet_write(ccc_is |> 
@@ -950,6 +953,7 @@ end_time
 rm(sheet_id_ccc)
 gs4_deauth()
 ```
+
 
 
 
