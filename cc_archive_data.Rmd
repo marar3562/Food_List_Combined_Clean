@@ -400,6 +400,81 @@ fl_18 = range_read(sheet_id_18
 rm(sheet_id_18)
 ```
 
+## Season 19
+
+```{r}
+sheet_id_19 = "1_bMRypjPb1pbTGRyx1DHJIny4d__Fp8v5gSVYwnBuJk"#original source
+# sheet_id_19 = "" #personal
+
+#Share Numbers tab
+sn_19 = range_read(sheet_id_19
+                ,sheet = 'share_numbers'
+                ,col_types = 'icccicD-'
+)
+
+#Farmer Produce tab
+fp_19 = range_read(sheet_id_19
+                ,sheet = 'farm_produce'
+                ,skip = 1
+                ,col_types = 'icccnnnnnncD'
+)
+
+#Weekly Share Lists tab
+wsl_19 = range_read(sheet_id_19
+                 ,sheet = 'weekly_share_lists'
+                 ,col_types = 'iccicin--D'
+)
+
+#Weekly Par tab
+wp_19 = range_read(sheet_id_19
+                 ,sheet = 'weekly_par'
+                 ,skip = 1
+                 ,col_types = 'iccnccicD'
+)
+
+#Inventory Sales tab
+is_19 = range_read(sheet_id_19
+                ,sheet = 'inv_sales'
+                ,col_types = 'iccccnncnccD--'
+)
+
+#Master Item List tab
+mil_19 = range_read(sheet_id_19
+                 ,sheet = 'master_item_list'
+                 ,col_types = 'cccccccnccnD'
+)
+
+#Share List tab
+################
+sl_19 = range_read(sheet_id_19
+                ,sheet = 'share_list'
+                ,col_types = 'ccniD'
+)
+
+#Default Par tab
+################
+
+#Share Rotation tab
+sr_19 = range_read(sheet_id_19
+                ,sheet = 'share_rotation'
+                ,col_types = '----Dicicn-----------'
+)
+
+#Farmer List tab
+################
+fl_19 = range_read(sheet_id_19
+                ,sheet = 'farmer_list'
+                ,col_types = 'cccccccD'
+)
+
+#Produce Per List tab
+################
+
+#Storage Location tab
+################
+
+rm(sheet_id_19)
+```
 
 ## Combine Data
 
@@ -418,6 +493,9 @@ c_sn = sn_14 |>
             ) |> 
   bind_rows(sn_18 |> 
               mutate(season = 's18')
+            ) |> 
+  bind_rows(sn_19 |> 
+              mutate(season = 's19')
             ) 
 
 #Farmer Produce tab
@@ -434,6 +512,9 @@ c_fp = fp_14 |>
             ) |> 
   bind_rows(fp_18 |> 
               mutate(season = 's18')
+            ) |> 
+  bind_rows(fp_19 |> 
+              mutate(season = 's19')
             )
 
 #Weekly Share Lists tab
@@ -450,6 +531,9 @@ c_wsl = wsl_14 |>
             ) |> 
   bind_rows(wsl_18 |> 
               mutate(season = 's18')
+            ) |> 
+  bind_rows(wsl_19 |> 
+              mutate(season = 's19')
             )
 
 #Weekly Par tab
@@ -466,6 +550,9 @@ c_wp = wp_14 |>
             ) |> 
   bind_rows(wp_18 |> 
               mutate(season = 's18')
+            ) |> 
+  bind_rows(wp_19 |> 
+              mutate(season = 's19')
             )
 
 #Inventory Sales tab
@@ -482,7 +569,11 @@ c_is = is_14 |>
             ) |> 
   bind_rows(is_18 |> 
               mutate(season = 's18')
+            ) |> 
+  bind_rows(is_19 |> 
+              mutate(season = 's19')
             )
+
 
 
 #Master Item List tab
@@ -499,6 +590,9 @@ c_mil = mil_14 |>
             ) |> 
   bind_rows(mil_18 |> 
               mutate(season = 's18')
+            ) |> 
+  bind_rows(mil_19 |> 
+              mutate(season = 's19')
             )
 
 #Share List tab
@@ -516,6 +610,9 @@ c_sl = sl_14 |>
             ) |> 
   bind_rows(sl_18 |> 
               mutate(season = 's18')
+            ) |> 
+  bind_rows(sl_19 |> 
+              mutate(season = 's19')
             )
 
 #Default Par tab
@@ -535,7 +632,11 @@ c_sr = sr_14 |>
             ) |> 
   bind_rows(sr_18 |> 
               mutate(season = 's18')
+            ) |> 
+  bind_rows(sr_19 |> 
+              mutate(season = 's19')
             )
+
 
 #Farmer List tab
 ################
@@ -552,6 +653,9 @@ c_fl = fl_14 |>
             ) |> 
   bind_rows(fl_18 |> 
               mutate(season = 's18')
+            ) |> 
+  bind_rows(fl_19 |> 
+              mutate(season = 's19')
             )
 
 
