@@ -5,6 +5,7 @@ output: html_notebook
 
 ## Libraries
 
+
 ```{r}
 library(googlesheets4)
 library(tidyverse)
@@ -993,6 +994,9 @@ cell_count_ccc_fl = dim(ccc_fl)[1]*dim(ccc_fl)[2]
 print(paste0('percentage filled to Google Sheets maximum cell count (Farmer List) ',(cell_count_ccc_fl / 10000000)*100, '%'))
 stopifnot(cell_count_ccc_fl <= 10000000)
 
+cell_count_ccc <- cell_count_ccc_sn + cell_count_ccc_fp + cell_count_ccc_wsl + cell_count_ccc_wp + cell_count_ccc_is_clean + cell_count_ccc_mil + cell_count_ccc_sl + cell_count_ccc_sr + cell_count_ccc_fl
+print(paste0('percentage filled to Google Sheets maximum cells (entire workbook) ',(cell_count_ccc / 10000000)*100, '%'))
+stopifnot(cell_count_ccc <= 10000000)
 ```
 
 ### Run Functions
@@ -1017,6 +1021,8 @@ sheet_write(ccc_wsl, sheet_id_ccc, sheet = "weekly_share_lists")
 
 #Weekly Par tab
 sheet_write(ccc_wp, sheet_id_ccc, sheet = "weekly_par")
+
+
 
 
 #Inventory Sales tab
